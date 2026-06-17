@@ -1,7 +1,8 @@
 "use client";
 
-import { CATEGORY_OPTIONS, COLOR_OPTIONS, HEEL_HEIGHT_OPTIONS, MATERIAL_OPTIONS, PRICE_RANGE } from "@/shared/config";
-import { formatPrice, useCatalogFilters } from "@/shared/lib";
+import { CATEGORY_OPTIONS, COLOR_OPTIONS, HEEL_HEIGHT_OPTIONS, MATERIAL_OPTIONS, PRICE_RANGE } from "@/entities/product/config";
+import { formatPrice } from "@/shared/lib";
+import { useCatalogFilters } from "@/features/product-filters/model/useCatalogFilters";
 
 export function useActiveFilterChips() {
   const { filters, removeFilter } = useCatalogFilters();

@@ -3,7 +3,7 @@
 import { ProductCard, ProductCardSkeleton } from "@/entities/product";
 import { LoadMoreButton, Pagination } from "@/features/pagination";
 import { EmptyState, ErrorState, Button } from "@/shared/ui";
-import type { CatalogCard } from "@/shared/api";
+import type { CatalogCard } from "@/entities/product/api";
 
 interface CatalogContentProps {
   isError: boolean;

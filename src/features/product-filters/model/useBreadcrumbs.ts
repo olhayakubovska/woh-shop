@@ -1,8 +1,8 @@
 "use client";
 
-import { useGetBreadcrumbsQuery } from "@/shared/api/catalogApi";
-import { CATEGORY_ID_MAP } from "@/shared/api/types";
-import type { CategorySlug } from "@/shared/api/types";
+import { useGetBreadcrumbsQuery } from "@/entities/product/api";
+import { CATEGORY_ID_MAP } from "@/entities/product/api";
+import type { CategorySlug } from "@/entities/product/api";
 
 export interface BreadcrumbItem {
   label: string;

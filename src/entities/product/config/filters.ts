@@ -1,10 +1,4 @@
-import type {
-  CategorySlug,
-  HeelHeight,
-  ProductColor,
-  ProductMaterial,
-  SortOption,
-} from "@/shared/api/types";
+import type { CategorySlug, HeelHeight, ProductColor, ProductMaterial, SortOption } from "@/entities/product/api/types";
 
 export const CATEGORY_OPTIONS: { value: CategorySlug; label: string }[] = [
   { value: "high-heels", label: "High Heels" },

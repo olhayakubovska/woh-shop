@@ -2,12 +2,13 @@
 
 import { useCallback } from "react";
 import Link from "next/link";
-import { useGetCatalogCardsQuery } from "@/shared/api";
+import { useGetCatalogCardsQuery } from "@/entities/product/api";
 import { ActiveFiltersBar, FilterSidebar, MobileFilterDrawer } from "@/features/product-filters";
 import { useAccumulatedItems } from "@/features/pagination";
 import { SortDropdown, MobileSortSheet } from "@/features/product-sort";
-import { PAGE_SIZE } from "@/shared/config";
-import { useCatalogFilters, useBreadcrumbs, useSkeletonCount } from "@/shared/lib";
+import { PAGE_SIZE } from "@/entities/product/config";
+import { useSkeletonCount } from "@/shared/lib";
+import { useCatalogFilters, useBreadcrumbs } from "@/features/product-filters";
 import { CatalogContent } from "./CatalogContent";
 
 export function ProductCatalog() {

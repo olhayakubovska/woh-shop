@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef, useState, useMemo } from "react";
-import { cn, useCatalogFilters } from "@/shared/lib";
-import type { CatalogFilters } from "@/shared/lib";
+import { cn } from "@/shared/lib";
+import { useCatalogFilters } from "@/features/product-filters/model/useCatalogFilters";
+import type { CatalogFilters } from "@/features/product-filters/model/useCatalogFilters";
 import { Button, IconButton, CloseIcon, FilterIcon } from "@/shared/ui";
 import { FilterSidebar, type FilterSidebarHandle, getFilterChips, usePreviewCount } from "@/features/product-filters";
 

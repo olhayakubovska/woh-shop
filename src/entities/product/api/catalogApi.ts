@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { insoleSizeToApiKey } from "@/shared/config/filters";
-import { CATEGORY_ID_MAP } from "@/shared/api/types";
-import type { BreadcrumbCategory, CatalogCardsResponse, SortOption } from "@/shared/api/types";
+import { insoleSizeToApiKey } from "@/entities/product/config/filters";
+import { CATEGORY_ID_MAP } from "@/entities/product/api/types";
+import type { BreadcrumbCategory, CatalogCardsResponse, SortOption } from "@/entities/product/api/types";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ?? "http://test-woh.keykey.com.ua/v1";

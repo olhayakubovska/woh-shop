@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { PAGE_SIZE } from "@/shared/config";
-import type { CatalogCard, CatalogCardsResponse } from "@/shared/api";
+import { PAGE_SIZE } from "@/entities/product/config";
+import type { CatalogCard, CatalogCardsResponse } from "@/entities/product/api";
 
 interface UseAccumulatedItemsResult {
   items: CatalogCard[];

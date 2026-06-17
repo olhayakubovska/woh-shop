@@ -6,3 +6,7 @@ export { useActiveFilterChips } from "./model/useActiveFilterChips";
 export { usePreviewCount } from "./model/usePreviewCount";
 export { getFilterChips } from "./model/getFilterChips";
 export type { ChipKey, FilterChip } from "./model/getFilterChips";
+export { useCatalogFilters, parseCatalogFilters } from "./model/useCatalogFilters";
+export type { CatalogFilters } from "./model/useCatalogFilters";
+export { useBreadcrumbs } from "./model/useBreadcrumbs";
+export type { BreadcrumbItem } from "./model/useBreadcrumbs";

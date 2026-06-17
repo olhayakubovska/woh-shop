@@ -2,7 +2,7 @@
 
 import { ProductCard, SliderProductCard } from "@/entities/product";
 import { cn } from "@/shared/lib";
-import type { CatalogCard } from "@/shared/api";
+import type { CatalogCard } from "@/entities/product/api";
 import { RecommendedLayout } from "./RecommendedLayout";
 
 interface RecommendedItemsProps {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useActiveFilterChips } from "@/features/product-filters/model/useActiveFilterChips";
-import { useCatalogFilters } from "@/shared/lib";
+import { useCatalogFilters } from "@/features/product-filters/model/useCatalogFilters";
 import { Button, CloseIcon } from "@/shared/ui";
 
 export function ActiveFiltersBar() {

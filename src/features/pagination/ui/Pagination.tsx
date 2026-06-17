@@ -1,6 +1,7 @@
 "use client";
 
-import { useCatalogFilters, cn } from "@/shared/lib";
+import { cn } from "@/shared/lib";
+import { useCatalogFilters } from "@/features/product-filters";
 import { Button } from "@/shared/ui";
 
 interface PaginationProps {

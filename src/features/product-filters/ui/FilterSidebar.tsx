@@ -10,12 +10,13 @@ import {
   useState,
 } from "react";
 import { useSearchParams } from "next/navigation";
-import { CATEGORY_OPTIONS, COLOR_OPTIONS, HEEL_HEIGHT_OPTIONS, INSOLE_SIZES, MATERIAL_OPTIONS, PRICE_RANGE } from "@/shared/config";
+import { CATEGORY_OPTIONS, COLOR_OPTIONS, HEEL_HEIGHT_OPTIONS, INSOLE_SIZES, MATERIAL_OPTIONS, PRICE_RANGE } from "@/entities/product/config";
 import { Checkbox, Chip, ColorSwatch, RangeSlider, Button } from "@/shared/ui";
-import { formatPrice, parseCatalogFilters, useCatalogFilters } from "@/shared/lib";
-import type { CatalogFilters } from "@/shared/lib";
+import { formatPrice } from "@/shared/lib";
+import { parseCatalogFilters, useCatalogFilters } from "@/features/product-filters/model/useCatalogFilters";
+import type { CatalogFilters } from "@/features/product-filters/model/useCatalogFilters";
 import { FilterSection } from "@/features/product-filters/ui/FilterSection";
-import type { CategorySlug, HeelHeight, ProductColor, ProductMaterial } from "@/shared/api";
+import type { CategorySlug, HeelHeight, ProductColor, ProductMaterial } from "@/entities/product/api";
 import type { ChipKey } from "@/features/product-filters/model/getFilterChips";
 
 type MultiFilterKey = "insoleSizes" | "heelHeights" | "materials" | "colors";

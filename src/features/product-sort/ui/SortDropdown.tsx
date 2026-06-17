@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { SORT_OPTIONS } from "@/shared/config";
-import { useCatalogFilters, cn } from "@/shared/lib";
+import { SORT_OPTIONS } from "@/entities/product/config";
+import { cn } from "@/shared/lib";
+import { useCatalogFilters } from "@/features/product-filters";
 import { Button } from "@/shared/ui";
 
 export function SortDropdown() {

@@ -2,8 +2,8 @@
 
 import { useCallback } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { CATEGORY_OPTIONS, COLOR_OPTIONS, HEEL_HEIGHT_OPTIONS, INSOLE_SIZES, MATERIAL_OPTIONS, PRICE_RANGE, SORT_OPTIONS } from "@/shared/config/filters";
-import type { CategorySlug, HeelHeight, ProductColor, ProductMaterial, SortOption } from "@/shared/api/types";
+import { CATEGORY_OPTIONS, COLOR_OPTIONS, HEEL_HEIGHT_OPTIONS, INSOLE_SIZES, MATERIAL_OPTIONS, PRICE_RANGE, SORT_OPTIONS } from "@/entities/product/config";
+import type { CategorySlug, HeelHeight, ProductColor, ProductMaterial, SortOption } from "@/entities/product/api";
 
 export interface CatalogFilters {
   categories: CategorySlug[];

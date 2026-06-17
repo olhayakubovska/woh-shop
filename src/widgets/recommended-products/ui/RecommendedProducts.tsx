@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetCatalogCardsQuery } from "@/shared/api";
+import { useGetCatalogCardsQuery } from "@/entities/product/api";
 import { ErrorState } from "@/shared/ui";
 import { RecommendedSkeletons } from "./RecommendedSkeletons";
 import { RecommendedItems } from "./RecommendedItems";

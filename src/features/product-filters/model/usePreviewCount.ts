@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useGetProductCountQuery } from "@/shared/api";
-import type { CatalogCardsArgs } from "@/shared/api";
-import { PRICE_RANGE } from "@/shared/config";
-import type { CatalogFilters } from "@/shared/lib";
+import { useGetProductCountQuery } from "@/entities/product/api";
+import type { CatalogCardsArgs } from "@/entities/product/api";
+import { PRICE_RANGE } from "@/entities/product/config";
+import type { CatalogFilters } from "@/features/product-filters/model/useCatalogFilters";
 
 interface FiltersSnapshot {
   categories: string[];

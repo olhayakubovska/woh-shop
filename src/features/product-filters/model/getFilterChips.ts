@@ -1,6 +1,6 @@
-import { CATEGORY_OPTIONS, COLOR_OPTIONS, HEEL_HEIGHT_OPTIONS, INSOLE_SIZES, MATERIAL_OPTIONS, PRICE_RANGE } from "@/shared/config";
+import { CATEGORY_OPTIONS, COLOR_OPTIONS, HEEL_HEIGHT_OPTIONS, MATERIAL_OPTIONS, PRICE_RANGE } from "@/entities/product/config";
 import { formatPrice } from "@/shared/lib";
-import type { CatalogFilters } from "@/shared/lib";
+import type { CatalogFilters } from "@/features/product-filters/model/useCatalogFilters";
 
 export type ChipKey = "category" | "size" | "heel" | "material" | "color" | "price";
 
