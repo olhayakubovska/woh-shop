@@ -1,11 +1,11 @@
 "use client";
 
 import { useGetCatalogCardsQuery } from "@/shared/api";
-import { ProductCard, SliderProductCard } from "@/entities/product";
+import { ProductCard, ProductCardSkeleton, SliderProductCard } from "@/entities/product";
 import { ErrorState } from "@/shared/ui";
 
 export function RecommendedProducts() {
-  const { data, isError, refetch } = useGetCatalogCardsQuery({
+  const { data, isFetching, isError, refetch } = useGetCatalogCardsQuery({
     limit: 8,
     sort: "updated_desc",
   });
@@ -27,34 +27,60 @@ export function RecommendedProducts() {
 
       {isError && <ErrorState onRetry={refetch} />}
 
-      <div className="grid grid-cols-2 gap-4 md:hidden">
-        {mobileItems.map((product) => (
-          <ProductCard key={product.groupId} product={product} />
-        ))}
-      </div>
-
-      <div className="-mr-6 hidden snap-x snap-mandatory gap-4 overflow-x-auto pb-2 md:flex md:pb-0 3xl:hidden [&::-webkit-scrollbar]:hidden">
-        {sliderItems.map((product) => (
-          <div key={product.groupId} className="w-40.5 shrink-0 snap-start">
-            <SliderProductCard product={product} />
+      {isFetching ? (
+        <>
+          <div className="grid grid-cols-2 gap-4 md:hidden">
+            {Array.from({ length: 2 }).map((_, i) => (
+              <ProductCardSkeleton key={i} />
+            ))}
           </div>
-        ))}
-      </div>
 
-      <div className="hidden 3xl:grid 3xl:grid-cols-6 3xl:gap-6">
-        {desktopItems.map((product) => (
-          <ProductCard
-            key={product.groupId}
-            product={product}
-            imageClassName="3xl:w-[230px] 3xl:h-[289px]"
-            infoClassName="3xl:p-3"
-            titleClassName="3xl:text-[10px] 3xl:font-medium 3xl:leading-4 3xl:tracking-[0.5px]"
-            descriptionClassName="3xl:text-[8px] 3xl:font-normal 3xl:leading-2 3xl:tracking-normal 3xl:whitespace-nowrap "
-            priceClassName="3xl:text-xs 3xl:font-medium 3xl:font-golos 3xl:tracking-normal"
-            favoriteClassName="3xl:h-8 3xl:w-8 3xl:top-2 3xl:right-2"
-          />
-        ))}
-      </div>
+          <div className="-mr-6 hidden gap-4 overflow-x-auto pb-2 md:flex md:pb-0 3xl:hidden">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="w-40.5 shrink-0">
+                <ProductCardSkeleton />
+              </div>
+            ))}
+          </div>
+
+          <div className="hidden 3xl:grid 3xl:grid-cols-6 3xl:gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <ProductCardSkeleton key={i} />
+            ))}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="grid grid-cols-2 gap-4 md:hidden">
+            {mobileItems.map((product) => (
+              <ProductCard key={product.groupId} product={product} />
+            ))}
+          </div>
+
+          <div className="-mr-6 hidden snap-x snap-mandatory gap-4 overflow-x-auto pb-2 md:flex md:pb-0 3xl:hidden [&::-webkit-scrollbar]:hidden">
+            {sliderItems.map((product) => (
+              <div key={product.groupId} className="w-40.5 shrink-0 snap-start">
+                <SliderProductCard product={product} />
+              </div>
+            ))}
+          </div>
+
+          <div className="hidden 3xl:grid 3xl:grid-cols-6 3xl:gap-6">
+            {desktopItems.map((product) => (
+              <ProductCard
+                key={product.groupId}
+                product={product}
+                imageClassName="3xl:w-[230px] 3xl:h-[289px]"
+                infoClassName="3xl:p-3"
+                titleClassName="3xl:text-[10px] 3xl:font-medium 3xl:leading-4 3xl:tracking-[0.5px]"
+                descriptionClassName="3xl:text-[8px] 3xl:font-normal 3xl:leading-2 3xl:tracking-normal 3xl:whitespace-nowrap "
+                priceClassName="3xl:text-xs 3xl:font-medium 3xl:font-golos 3xl:tracking-normal"
+                favoriteClassName="3xl:h-8 3xl:w-8 3xl:top-2 3xl:right-2"
+              />
+            ))}
+          </div>
+        </>
+      )}
     </section>
   );
 }

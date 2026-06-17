@@ -15,7 +15,7 @@ export function ProductCatalog() {
   const breadcrumbs = useBreadcrumbs(filters.categories);
   const skeletonCount = useSkeletonCount();
 
-  const { data, isLoading, isError, refetch } = useGetCatalogCardsQuery({
+  const { data, isFetching, isError, refetch } = useGetCatalogCardsQuery({
     categories: filters.categories,
     insoleSizes: filters.insoleSizes,
     heelHeights: filters.heelHeights,
@@ -29,14 +29,14 @@ export function ProductCatalog() {
   });
 
   const { items, isLoadingMore, isAppendPending, handleLoadMore, handlePageChange } =
-    useAccumulatedItems(data, isLoading, () => setPage(filters.page + 1));
+    useAccumulatedItems(data, isFetching, () => setPage(filters.page + 1));
 
   const total = data?.meta.total ?? 0;
   const totalPages = data?.meta.pages ?? 1;
   const remaining = filters.page < totalPages
     ? Math.min(PAGE_SIZE, total - filters.page * PAGE_SIZE)
     : 0;
-  const showSkeletons = isLoading && !isAppendPending;
+  const showSkeletons = isFetching && !isAppendPending;
 
   return (
     <div className="mx-auto max-w-375 px-4 pt-4 md:px-6 3xl:px-0 3xl:pt-5">
