@@ -207,7 +207,7 @@ export function ChevronFilterIcon(props: SVGProps<SVGSVGElement>) {
     >
       <path
         d="M0.664368 5.33795L5.16437 1.33795L9.66437 5.33795"
-        stroke="#0D0D0D"
+        stroke="currentColor"
         strokeWidth="2"
       />
     </svg>

@@ -84,13 +84,13 @@ export function MobileFilterDrawer() {
                   {chips.map((chip) => (
                     <span
                       key={chip.key}
-                      className="flex h-7 items-center gap-1 bg-[#9999991A] px-1 py-2 font-golos text-[10px] font-medium tracking-normal"
+                      className="flex h-7 items-center gap-1 bg-grey-muted px-1 py-2 font-golos text-[10px] font-medium tracking-normal"
                     >
                       {chip.label}
                       <Button
                         aria-label={`Видалити ${chip.label}`}
                         onClick={() => sidebarRef.current?.removePending(chip.key)}
-                        className="ml-1 leading-none text-[#0D0D0D] hover:text-pink-main"
+                        className="ml-1 leading-none text-dark-main hover:text-pink-main"
                       >
                         ×
                       </Button>
@@ -107,7 +107,7 @@ export function MobileFilterDrawer() {
             onPendingChange={setPendingFilters}
           />
 
-          <div className="-mx-4 mb-4 border-t border-[#D9D9D9]" />
+          <div className="-mx-4 mb-4 border-t border-divider" />
 
           <div className="flex gap-2">
             <Button

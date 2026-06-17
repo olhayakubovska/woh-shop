@@ -194,7 +194,7 @@ export const FilterSidebar = forwardRef<FilterSidebarHandle, FilterSidebarProps>
                 setPending((p) => ({ ...p, minPrice: min, maxPrice: max }))
               }
             />
-            <div className="flex items-center justify-between text-sm leading-none font-medium text-[#0D0D0D] 3xl:text-base">
+            <div className="flex items-center justify-between text-sm leading-none font-medium text-dark-main 3xl:text-base">
               <span>{formatPrice(priceValue[0])}</span>
               <span>{formatPrice(priceValue[1])}</span>
             </div>

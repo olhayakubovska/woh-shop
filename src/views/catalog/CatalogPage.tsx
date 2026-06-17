@@ -9,7 +9,7 @@ export function CatalogPage() {
     <div className="flex min-h-full flex-col">
       <Header />
 
-      <main className="flex-1">
+      <main className="container flex-1">
         <Suspense>
           <ProductCatalog />
         </Suspense>

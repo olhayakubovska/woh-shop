@@ -61,7 +61,7 @@ export function Header() {
 
           <BurgerMenu />
 
-          <span className="hidden h-6 items-center gap-10 border-l-[0.5px] border-[#0D0D0D] pl-[16.5px] font-montserrat text-[13px] leading-[100%] font-medium tracking-[1.5px] uppercase 3xl:flex">
+          <span className="hidden h-6 items-center gap-10 border-l-[0.5px] border-dark-main pl-[16.5px] font-montserrat text-[13px] leading-[100%] font-medium tracking-[1.5px] uppercase 3xl:flex">
             UA
           </span>
         </div>

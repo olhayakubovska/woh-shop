@@ -19,7 +19,7 @@ export function ActiveFiltersBar() {
         <Button
           key={chip.key}
           onClick={() => removeFilter(chip.key)}
-          className="h-7 gap-2 bg-[#9999991A] px-1 py-2 font-golos text-[10px] font-medium tracking-normal hover:border-foreground 3xl:p-2 3xl:text-[11px]"
+          className="h-7 gap-2 bg-grey-muted px-1 py-2 font-golos text-[10px] font-medium tracking-normal hover:border-foreground 3xl:p-2 3xl:text-[11px]"
         >
           {chip.label}
           <CloseIcon width={6} height={6} />
@@ -27,7 +27,7 @@ export function ActiveFiltersBar() {
       ))}
       <Button
         onClick={clearAll}
-        className="ml-auto bg-[#99999980] px-4 py-1.5 text-[9px] font-medium tracking-wide text-[#0D0D0D] uppercase"
+        className="ml-auto bg-grey-overlay px-4 py-1.5 text-[9px] font-medium tracking-wide text-dark-main uppercase"
       >
         очистити
       </Button>

@@ -16,7 +16,7 @@ export function RecommendedProducts() {
   const desktopItems = items.slice(0, 6);
 
   return (
-    <section className="mx-auto max-w-375 px-4 pt-12 md:px-6 md:pt-14 3xl:px-0 3xl:pt-20">
+    <section className="pt-12 md:pt-14 3xl:pt-20">
       <p className="font-golos text-xs leading-3.5 font-bold tracking-[1px] text-pink-main uppercase 3xl:text-sm">
         Our selection
       </p>

@@ -39,7 +39,7 @@ export function ProductCatalog() {
   const showSkeletons = isFetching && !isAppendPending;
 
   return (
-    <div className="mx-auto max-w-375 px-4 pt-4 md:px-6 3xl:px-0 3xl:pt-5">
+    <div className="pt-4 3xl:pt-5">
       <p className="mb-4 flex gap-1.5 text-[10px] leading-[100%] font-semibold tracking-[2px] text-grey-text uppercase">
         {breadcrumbs.map((crumb, i) => (
           <span key={i} className="flex items-center gap-1.5">

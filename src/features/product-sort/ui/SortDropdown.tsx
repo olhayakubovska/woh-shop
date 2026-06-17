@@ -15,11 +15,11 @@ export function SortDropdown() {
     <div className="relative">
       <Button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="gap-3 border-[0.5px] border-[#FF99D6] px-4 py-2 text-sm leading-4"
+        className="gap-3 border-[0.5px] border-pink-main px-4 py-2 text-sm leading-4"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
-        <span className="text-[#0D0D0D]">Сортування: {current.label}</span>
+        <span className="text-dark-main">Сортування: {current.label}</span>
       </Button>
 
       {isOpen && (
