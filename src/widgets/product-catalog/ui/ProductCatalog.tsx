@@ -1,22 +1,21 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useGetCatalogCardsQuery } from "@/shared/api";
 import { ProductCard, ProductCardSkeleton } from "@/entities/product";
 import { ActiveFiltersBar, FilterSidebar, MobileFilterDrawer } from "@/features/product-filters";
-import { LoadMoreButton, Pagination } from "@/features/pagination";
+import { LoadMoreButton, Pagination, useAccumulatedItems } from "@/features/pagination";
 import { SortDropdown, MobileSortSheet } from "@/features/product-sort";
 import { PAGE_SIZE } from "@/shared/config";
 import { EmptyState, ErrorState, Button } from "@/shared/ui";
-import { useCatalogFilters, useBreadcrumbs } from "@/shared/lib";
-import type { CatalogCard } from "@/shared/api";
+import { useCatalogFilters, useBreadcrumbs, useSkeletonCount } from "@/shared/lib";
 
 export function ProductCatalog() {
   const { filters, clearAll, setPage } = useCatalogFilters();
   const breadcrumbs = useBreadcrumbs(filters.categories);
+  const skeletonCount = useSkeletonCount();
 
-  const queryArgs = {
+  const { data, isLoading, isError, refetch } = useGetCatalogCardsQuery({
     categories: filters.categories,
     insoleSizes: filters.insoleSizes,
     heelHeights: filters.heelHeights,
@@ -27,35 +26,10 @@ export function ProductCatalog() {
     sort: filters.sort,
     page: filters.page,
     limit: PAGE_SIZE,
-  };
+  });
 
-  const { data, isLoading, isError, refetch } = useGetCatalogCardsQuery(queryArgs);
-
-  const [items, setItems] = useState<CatalogCard[]>([]);
-  const [isAppendPending, setIsAppendPending] = useState(false);
-  const isAppendingRef = useRef(false);
-
-  useEffect(() => {
-    if (!data) return;
-    if (isAppendingRef.current) {
-      setItems((prev) => [...prev, ...data.items]);
-      isAppendingRef.current = false;
-      setIsAppendPending(false);
-    } else {
-      setItems(data.items);
-    }
-  }, [data]);
-
-  const handleLoadMore = () => {
-    isAppendingRef.current = true;
-    setIsAppendPending(true);
-    setPage(filters.page + 1);
-  };
-
-  const handlePageChange = () => {
-    isAppendingRef.current = false;
-    setIsAppendPending(false);
-  };
+  const { items, isLoadingMore, isAppendPending, handleLoadMore, handlePageChange } =
+    useAccumulatedItems(data, isLoading, () => setPage(filters.page + 1));
 
   const total = data?.meta.total ?? 0;
   const totalPages = data?.meta.pages ?? 1;
@@ -63,7 +37,6 @@ export function ProductCatalog() {
     ? Math.min(PAGE_SIZE, total - filters.page * PAGE_SIZE)
     : 0;
   const showSkeletons = isLoading && !isAppendPending;
-  const isLoadingMore = isLoading && isAppendPending;
 
   return (
     <div className="mx-auto max-w-375 px-4 pt-4 md:px-6 3xl:px-0 3xl:pt-5">
@@ -76,9 +49,7 @@ export function ProductCatalog() {
                 {crumb.label}
               </Link>
             ) : (
-              <span
-                className={i === breadcrumbs.length - 1 ? "text-pink-main" : ""}
-              >
+              <span className={i === breadcrumbs.length - 1 ? "text-pink-main" : ""}>
                 {crumb.label}
               </span>
             )}
@@ -90,7 +61,6 @@ export function ProductCatalog() {
         <h1 className="text-xl font-bold tracking-[2px] uppercase md:text-2xl 3xl:text-4xl 3xl:leading-11">
           Каталог взуття
         </h1>
-
         <div className="hidden 3xl:block 3xl:self-end">
           <SortDropdown />
         </div>
@@ -115,8 +85,8 @@ export function ProductCatalog() {
             <ErrorState onRetry={refetch} />
           ) : showSkeletons ? (
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-x-6 md:gap-y-4 3xl:gap-6">
-              {Array.from({ length: PAGE_SIZE }).map((_, index) => (
-                <ProductCardSkeleton key={index} />
+              {Array.from({ length: skeletonCount }).map((_, i) => (
+                <ProductCardSkeleton key={i} />
               ))}
             </div>
           ) : items.length === 0 ? (
@@ -146,11 +116,7 @@ export function ProductCatalog() {
                 isLoading={isLoadingMore}
                 remaining={remaining}
               />
-
-              <Pagination
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
+              <Pagination totalPages={totalPages} onPageChange={handlePageChange} />
             </>
           )}
         </div>

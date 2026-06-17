@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/shared/ui/Button";
 import { Spinner } from "@/shared/ui/Spinner";
 
@@ -16,12 +16,23 @@ export function ErrorState({
   onRetry,
 }: ErrorStateProps) {
   const [isRetrying, setIsRetrying] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleRetry = async () => {
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  const handleRetry = () => {
     if (!onRetry) return;
+    if (timerRef.current) clearTimeout(timerRef.current);
     setIsRetrying(true);
-    await Promise.resolve(onRetry());
-    setTimeout(() => setIsRetrying(false), 1000);
+    onRetry();
+    timerRef.current = setTimeout(() => {
+      setIsRetrying(false);
+      timerRef.current = null;
+    }, 1000);
   };
 
   return (
