@@ -59,7 +59,9 @@ export function ProductCatalog() {
 
   const total = data?.meta.total ?? 0;
   const totalPages = data?.meta.pages ?? 1;
-  const remaining = Math.min(PAGE_SIZE, Math.max(0, total - items.length));
+  const remaining = filters.page < totalPages
+    ? Math.min(PAGE_SIZE, total - filters.page * PAGE_SIZE)
+    : 0;
   const showSkeletons = isLoading && !isAppendPending;
   const isLoadingMore = isLoading && isAppendPending;
 
