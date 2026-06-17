@@ -57,12 +57,16 @@ export function RecommendedProducts() {
             ))}
           </div>
 
-          <div className="-mr-6 hidden snap-x snap-mandatory gap-4 overflow-x-auto pb-2 md:flex md:pb-0 3xl:hidden [&::-webkit-scrollbar]:hidden">
-            {sliderItems.map((product) => (
-              <div key={product.groupId} className="w-40.5 shrink-0 snap-start">
+          <div className="-mx-4 hidden snap-x snap-mandatory gap-4 overflow-x-auto pb-2 md:-mx-6 md:flex md:pb-0 3xl:hidden [&::-webkit-scrollbar]:hidden">
+            {sliderItems.map((product, i) => (
+              <div
+                key={product.groupId}
+                className={`w-40.5 shrink-0 snap-start ${i === 0 ? "pl-4 md:pl-6" : ""}`}
+              >
                 <SliderProductCard product={product} />
               </div>
             ))}
+            <div className="w-4 shrink-0 md:w-6" />
           </div>
 
           <div className="hidden 3xl:grid 3xl:grid-cols-6 3xl:gap-6">

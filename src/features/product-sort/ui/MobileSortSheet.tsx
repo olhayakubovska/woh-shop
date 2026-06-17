@@ -44,7 +44,7 @@ export function MobileSortSheet() {
                       aria-selected={isActive}
                       onClick={() => { setSort(option.value); setIsOpen(false); }}
                       className={cn(
-                        "w-full gap-0 text-left text-sm font-medium",
+                        "w-full justify-start gap-0 text-sm font-medium",
                         isActive
                           ? "font-semibold text-pink-main"
                           : "px-4 py-4 text-foreground hover:text-pink-main",
