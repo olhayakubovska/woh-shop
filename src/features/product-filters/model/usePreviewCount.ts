@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useGetProductCountQuery } from "@/shared/api/catalogApi";
-import { PRICE_RANGE } from "@/shared/config/filters";
-import type { CatalogFilters } from "@/shared/lib/useCatalogFilters";
-import type { CatalogCardsArgs } from "@/shared/api/catalogApi";
+import { useGetProductCountQuery } from "@/shared/api";
+import type { CatalogCardsArgs } from "@/shared/api";
+import { PRICE_RANGE } from "@/shared/config";
+import type { CatalogFilters } from "@/shared/lib";
 
 export function usePreviewCount(pending: CatalogFilters): number | null {
   const [debouncedArgs, setDebouncedArgs] = useState<CatalogCardsArgs | null>(null);

@@ -3,13 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { cn } from "@/shared/lib/cn";
-import {
-  FacebookIcon,
-  InstagramIcon,
-  TelegramIcon,
-  TikTokIcon,
-} from "@/shared/ui/icons";
+import { cn } from "@/shared/lib";
+import { FacebookIcon, InstagramIcon, TelegramIcon, TikTokIcon } from "@/shared/ui";
 
 const CATALOG_LINKS = [
   "High Heels",

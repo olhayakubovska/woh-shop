@@ -9,10 +9,15 @@ export { RangeSlider } from "./RangeSlider";
 export { Spinner } from "./Spinner";
 export {
   CartIcon,
+  ChevronFilterIcon,
   CloseIcon,
+  FacebookIcon,
   FilterIcon,
   HeartIcon,
+  InstagramIcon,
   MenuIcon,
   SearchIcon,
+  TelegramIcon,
+  TikTokIcon,
   UserIcon,
 } from "./icons";

@@ -13,8 +13,7 @@ import { Checkbox, Chip, ColorSwatch, RangeSlider, Button } from "@/shared/ui";
 import { formatPrice, parseCatalogFilters, useCatalogFilters } from "@/shared/lib";
 import type { CatalogFilters } from "@/shared/lib";
 import { FilterSection } from "@/features/product-filters/ui/FilterSection";
-import type { CategorySlug } from "@/shared/api";
-import type { HeelHeight, ProductColor, ProductMaterial } from "@/shared/api";
+import type { CategorySlug, HeelHeight, ProductColor, ProductMaterial } from "@/shared/api";
 import type { ChipKey } from "@/features/product-filters/model/getFilterChips";
 
 export interface FilterSidebarHandle {

@@ -1,5 +1,4 @@
-import { Button } from "@/shared/ui/Button";
-import { Spinner } from "@/shared/ui/Spinner";
+import { Button, Spinner } from "@/shared/ui";
 
 interface LoadMoreButtonProps {
   onClick: () => void;

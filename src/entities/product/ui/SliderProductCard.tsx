@@ -2,11 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { IconButton } from "@/shared/ui/IconButton";
-import { HeartIcon } from "@/shared/ui/icons";
-import { formatPrice } from "@/shared/lib/format";
-import { cn } from "@/shared/lib/cn";
-import type { CatalogCard } from "@/shared/api/types";
+import { IconButton, HeartIcon } from "@/shared/ui";
+import { formatPrice, cn } from "@/shared/lib";
+import type { CatalogCard } from "@/shared/api";
 
 interface SliderProductCardProps {
   product: CatalogCard;

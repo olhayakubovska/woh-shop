@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useState } from "react";
-import { ChevronFilterIcon } from "@/shared/ui/icons";
+import { ChevronFilterIcon } from "@/shared/ui";
 
 interface FilterSectionProps {
   title: string;
