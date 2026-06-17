@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { cn, useCatalogFilters } from "@/shared/lib";
 import type { CatalogFilters } from "@/shared/lib";
-import { Button, CloseIcon, FilterIcon } from "@/shared/ui";
+import { Button, IconButton, CloseIcon, FilterIcon } from "@/shared/ui";
 import { FilterSidebar, type FilterSidebarHandle, getFilterChips, usePreviewCount } from "@/features/product-filters";
 
 export function MobileFilterDrawer() {
@@ -60,14 +60,9 @@ export function MobileFilterDrawer() {
             <h2 className="tracking-0.7 font-golos text-sm font-semibold uppercase">
               Фільтрація
             </h2>
-            <button
-              type="button"
-              aria-label="Закрити"
-              onClick={() => setIsOpen(false)}
-              className="cursor-pointer"
-            >
+            <IconButton aria-label="Закрити" onClick={() => setIsOpen(false)}>
               <CloseIcon />
-            </button>
+            </IconButton>
           </div>
 
           {chips.length > 0 && (
@@ -78,13 +73,12 @@ export function MobileFilterDrawer() {
                   <span className="font-montserrat text-[10px] font-bold tracking-[1px] uppercase">
                     Обрано:
                   </span>
-                  <button
-                    type="button"
+                  <Button
                     onClick={handleClear}
                     className="font-montserrat text-[10px] font-bold tracking-[1px] uppercase underline decoration-solid"
                   >
                     Очистити
-                  </button>
+                  </Button>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
                   {chips.map((chip) => (
@@ -93,16 +87,13 @@ export function MobileFilterDrawer() {
                       className="flex h-7 items-center gap-1 bg-[#9999991A] px-1 py-2 font-golos text-[10px] font-medium tracking-normal"
                     >
                       {chip.label}
-                      <button
-                        type="button"
+                      <Button
                         aria-label={`Видалити ${chip.label}`}
-                        onClick={() =>
-                          sidebarRef.current?.removePending(chip.key)
-                        }
+                        onClick={() => sidebarRef.current?.removePending(chip.key)}
                         className="ml-1 leading-none text-[#0D0D0D] hover:text-pink-main"
                       >
                         ×
-                      </button>
+                      </Button>
                     </span>
                   ))}
                 </div>
@@ -129,9 +120,7 @@ export function MobileFilterDrawer() {
               onClick={handleApply}
               className="flex-1 bg-dark-main py-3 text-[10px] leading-2 font-semibold text-white-main uppercase"
             >
-              {previewCount !== null
-                ? `Показати (${previewCount})`
-                : "Показати товари"}
+              {previewCount !== null ? `Показати (${previewCount})` : "Показати товари"}
             </Button>
           </div>
         </div>

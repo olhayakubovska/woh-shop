@@ -3,26 +3,24 @@
 import { useState } from "react";
 import { SORT_OPTIONS } from "@/shared/config";
 import { useCatalogFilters, cn } from "@/shared/lib";
+import { Button } from "@/shared/ui";
 
 export function SortDropdown() {
   const { filters, setSort } = useCatalogFilters();
   const [isOpen, setIsOpen] = useState(false);
 
-  const current =
-    SORT_OPTIONS.find((option) => option.value === filters.sort) ??
-    SORT_OPTIONS[0];
+  const current = SORT_OPTIONS.find((option) => option.value === filters.sort) ?? SORT_OPTIONS[0];
 
   return (
     <div className="relative">
-      <button
-        type="button"
+      <Button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex cursor-pointer items-center gap-3 border-[0.5px] border-[#FF99D6] px-4 py-2 text-sm leading-4"
+        className="gap-3 border-[0.5px] border-[#FF99D6] px-4 py-2 text-sm leading-4"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
         <span className="text-[#0D0D0D]">Сортування: {current.label}</span>
-      </button>
+      </Button>
 
       {isOpen && (
         <>
@@ -38,22 +36,17 @@ export function SortDropdown() {
           >
             {SORT_OPTIONS.map((option) => (
               <li key={option.value}>
-                <button
-                  type="button"
+                <Button
                   role="option"
                   aria-selected={option.value === filters.sort}
-                  onClick={() => {
-                    setSort(option.value);
-                    setIsOpen(false);
-                  }}
+                  onClick={() => { setSort(option.value); setIsOpen(false); }}
                   className={cn(
-                    "block w-full cursor-pointer px-4 py-2.5 text-left text-sm hover:bg-bg-muted",
-                    option.value === filters.sort &&
-                      "font-semibold text-pink-main",
+                    "w-full justify-start px-4 py-2.5 text-sm hover:bg-bg-muted",
+                    option.value === filters.sort && "font-semibold text-pink-main",
                   )}
                 >
                   {option.label}
-                </button>
+                </Button>
               </li>
             ))}
           </ul>

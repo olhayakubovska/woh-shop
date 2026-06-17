@@ -41,14 +41,9 @@ export function BurgerMenu() {
           <span className="font-montserrat text-sm font-semibold tracking-widest uppercase">
             Меню
           </span>
-          <button
-            type="button"
-            aria-label="Закрити меню"
-            onClick={() => setIsOpen(false)}
-            className="cursor-pointer p-1"
-          >
+          <IconButton aria-label="Закрити меню" onClick={() => setIsOpen(false)}>
             <CloseIcon width={16} height={16} />
-          </button>
+          </IconButton>
         </div>
 
         <nav className="flex flex-col gap-1 px-6 py-6">

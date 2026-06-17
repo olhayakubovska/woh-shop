@@ -9,14 +9,11 @@ export function MobileSortSheet() {
   const { filters, setSort } = useCatalogFilters();
   const [isOpen, setIsOpen] = useState(false);
 
-  const current =
-    SORT_OPTIONS.find((option) => option.value === filters.sort) ??
-    SORT_OPTIONS[0];
+  const current = SORT_OPTIONS.find((option) => option.value === filters.sort) ?? SORT_OPTIONS[0];
 
   return (
     <>
       <Button
-        type="button"
         onClick={() => setIsOpen(true)}
         className="h-7.5 w-55 gap-2 border border-pink-main px-4 py-2 font-golos text-xs leading-none text-white-main md:w-58.75 3xl:hidden"
       >
@@ -41,20 +38,13 @@ export function MobileSortSheet() {
               {SORT_OPTIONS.map((option) => {
                 const isActive = option.value === filters.sort;
                 return (
-                  <li
-                    key={option.value}
-                    className="border-t border-border first:border-t-0"
-                  >
-                    <button
-                      type="button"
+                  <li key={option.value} className="border-t border-border first:border-t-0">
+                    <Button
                       role="option"
                       aria-selected={isActive}
-                      onClick={() => {
-                        setSort(option.value);
-                        setIsOpen(false);
-                      }}
+                      onClick={() => { setSort(option.value); setIsOpen(false); }}
                       className={cn(
-                        "flex w-full cursor-pointer items-center gap-0 text-left text-sm font-medium",
+                        "w-full gap-0 text-left text-sm font-medium",
                         isActive
                           ? "font-semibold text-pink-main"
                           : "px-4 py-4 text-foreground hover:text-pink-main",
@@ -64,7 +54,7 @@ export function MobileSortSheet() {
                         <span className="mr-3 h-12.25 w-1 shrink-0 rounded-r-full bg-pink-main" />
                       )}
                       {option.label}
-                    </button>
+                    </Button>
                   </li>
                 );
               })}
