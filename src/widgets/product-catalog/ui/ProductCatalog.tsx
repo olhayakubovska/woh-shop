@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useProducts } from "@/entities/product/api/useProducts";
+import { useGetCatalogCardsQuery } from "@/shared/api/catalogApi";
 import { ProductCard } from "@/entities/product/ui/ProductCard";
 import { ProductCardSkeleton } from "@/entities/product/ui/ProductCardSkeleton";
 import { ActiveFiltersBar } from "@/features/product-filters/ui/ActiveFiltersBar";
@@ -23,7 +23,8 @@ import type { CatalogCard } from "@/shared/api/types";
 export function ProductCatalog() {
   const { filters, clearAll, setPage } = useCatalogFilters();
   const breadcrumbs = useBreadcrumbs(filters.categories[0]);
-  const { data, isLoading, error, refetch } = useProducts({
+
+  const queryArgs = {
     category: filters.categories[0],
     insoleSize: filters.insoleSize,
     heelHeight: filters.heelHeight,
@@ -34,7 +35,9 @@ export function ProductCatalog() {
     sort: filters.sort,
     page: filters.page,
     limit: PAGE_SIZE,
-  });
+  };
+
+  const { data, isLoading, isError, refetch } = useGetCatalogCardsQuery(queryArgs);
 
   const [items, setItems] = useState<CatalogCard[]>([]);
   const [isAppendPending, setIsAppendPending] = useState(false);
@@ -114,7 +117,7 @@ export function ProductCatalog() {
         </div>
 
         <div>
-          {error ? (
+          {isError ? (
             <ErrorState onRetry={refetch} />
           ) : showSkeletons ? (
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-x-6 md:gap-y-4 3xl:gap-6">

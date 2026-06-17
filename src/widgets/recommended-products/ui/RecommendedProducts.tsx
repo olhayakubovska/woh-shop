@@ -1,28 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { fetchCatalogCards } from "@/shared/api/catalog";
+import { useGetCatalogCardsQuery } from "@/shared/api/catalogApi";
 import { ProductCard } from "@/entities/product/ui/ProductCard";
 import { SliderProductCard } from "@/entities/product/ui/SliderProductCard";
 import { ErrorState } from "@/shared/ui/ErrorState";
-import type { CatalogCard } from "@/shared/api/types";
 
 export function RecommendedProducts() {
-  const [items, setItems] = useState<CatalogCard[]>([]);
-  const [error, setError] = useState(false);
-  const [retryKey, setRetryKey] = useState(0);
+  const { data, isError, refetch } = useGetCatalogCardsQuery({
+    limit: 8,
+    sort: "updated_desc",
+  });
 
-  useEffect(() => {
-    fetchCatalogCards({ limit: 8, sort: "updated_desc" })
-      .then((res) => setItems(res.items))
-      .catch(() => setError(true));
-  }, [retryKey]);
-
-  const handleRetry = () => {
-    setError(false);
-    setRetryKey((k) => k + 1);
-  };
-
+  const items = data?.items ?? [];
   const mobileItems = items.slice(0, 2);
   const sliderItems = items.slice(0, 8);
   const desktopItems = items.slice(0, 6);
@@ -37,7 +26,7 @@ export function RecommendedProducts() {
         Рекомендовані товари
       </h2>
 
-      {error && <ErrorState onRetry={handleRetry} />}
+      {isError && <ErrorState onRetry={refetch} />}
 
       <div className="grid grid-cols-2 gap-4 md:hidden">
         {mobileItems.map((product) => (

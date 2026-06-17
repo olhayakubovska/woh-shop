@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Golos_Text, Montserrat, Urbanist } from "next/font/google";
+import { Providers } from "./providers";
 import "./globals.css";
 
 const golosText = Golos_Text({
@@ -34,7 +35,7 @@ export default function RootLayout({
       className={`${golosText.variable} ${montserrat.variable} ${urbanist.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

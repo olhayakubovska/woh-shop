@@ -1,47 +1,36 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchCatalogCards } from "@/shared/api/catalog";
-import { insoleSizeToApiKey, PRICE_RANGE } from "@/shared/config/filters";
-import { CATEGORY_ID_MAP } from "@/shared/api/types";
+import { useGetProductCountQuery } from "@/shared/api/catalogApi";
+import { PRICE_RANGE } from "@/shared/config/filters";
 import type { CatalogFilters } from "@/shared/lib/useCatalogFilters";
+import type { CatalogCardsArgs } from "@/shared/api/catalogApi";
 
 export function usePreviewCount(pending: CatalogFilters): number | null {
-  const [count, setCount] = useState<number | null>(null);
-
-  const categoriesKey = pending.categories.join(",");
+  const [debouncedArgs, setDebouncedArgs] = useState<CatalogCardsArgs | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      const char: Record<string, string> = {};
-      if (pending.insoleSize)
-        char["insoleSize"] = insoleSizeToApiKey(pending.insoleSize);
-      if (pending.heelHeight) char["heelHeight"] = pending.heelHeight;
-      if (pending.material) char["material"] = pending.material;
-      if (pending.color) char["color"] = pending.color;
-
-      const firstCategory = pending.categories[0];
-
-      fetchCatalogCards({
-        categoryId: firstCategory ? CATEGORY_ID_MAP[firstCategory] : undefined,
-        priceMin:
+      setDebouncedArgs({
+        category: pending.categories[0],
+        insoleSize: pending.insoleSize,
+        heelHeight: pending.heelHeight,
+        material: pending.material,
+        color: pending.color,
+        minPrice:
           pending.minPrice && pending.minPrice > PRICE_RANGE.min
             ? pending.minPrice
             : undefined,
-        priceMax:
+        maxPrice:
           pending.maxPrice && pending.maxPrice < PRICE_RANGE.max
             ? pending.maxPrice
             : undefined,
-        char: Object.keys(char).length > 0 ? char : undefined,
-        limit: 1,
-      })
-        .then((res) => setCount(res.meta.total))
-        .catch(() => setCount(null));
+      });
     }, 400);
 
     return () => clearTimeout(timer);
   }, [
-    categoriesKey,
+    pending.categories[0],
     pending.insoleSize,
     pending.heelHeight,
     pending.material,
@@ -50,5 +39,9 @@ export function usePreviewCount(pending: CatalogFilters): number | null {
     pending.maxPrice,
   ]);
 
-  return count;
+  const { data } = useGetProductCountQuery(debouncedArgs!, {
+    skip: debouncedArgs === null,
+  });
+
+  return data ?? null;
 }
