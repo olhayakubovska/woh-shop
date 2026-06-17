@@ -72,7 +72,7 @@ export function ProductCard({
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <h3
             className={cn(
-              "line-clamp-2 font-montserrat text-[10px] leading-3 font-semibold tracking-[1px] uppercase md:line-clamp-1",
+              "line-clamp-2 h-6 font-montserrat text-[10px] leading-3 font-semibold tracking-[1px] uppercase md:line-clamp-1 md:h-auto",
               titleClassName,
             )}
           >
@@ -81,7 +81,7 @@ export function ProductCard({
 
           <p
             className={cn(
-              "line-clamp-2 font-golos text-[8px] leading-2.5 font-normal tracking-[1px] text-grey-text uppercase 3xl:line-clamp-1",
+              "line-clamp-2 h-5 font-golos text-[8px] leading-2.5 font-normal tracking-[1px] text-grey-text uppercase md:h-auto 3xl:line-clamp-1",
               descriptionClassName,
             )}
           >
