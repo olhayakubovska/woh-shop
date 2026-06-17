@@ -38,7 +38,7 @@ export function CatalogContent({
     return (
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-x-6 md:gap-y-4 3xl:gap-6">
         {Array.from({ length: skeletonCount }).map((_, i) => (
-          <ProductCardSkeleton key={i} />
+          <ProductCardSkeleton key={i} imageClassName="3xl:w-89.25 3xl:h-112.25" infoClassName="3xl:p-3" />
         ))}
       </div>
     );
