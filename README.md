@@ -1,5 +1,28 @@
+# WOH Shop — Каталог танцювального взуття
 
-## Запуск проєкту
+Тестове завдання: сторінка каталогу інтернет-магазину **World of Heels**.
+
+## Стек
+
+| Технологія | Версія | Призначення |
+|---|---|---|
+| Next.js | 16 | App Router, SSR, routing |
+| TypeScript | 5 | Статична типізація |
+| Redux Toolkit + RTK Query | 2 | Глобальний стейт, запити до API, кешування |
+| Tailwind CSS | 4 | Стилізація |
+| FSD | — | Архітектурна методологія |
+
+## Функціонал
+
+- Каталог товарів із завантаженням через API
+- Фільтрація: категорія, розмір, колір, матеріал, висота каблука, ціна (множинний вибір)
+- Сортування
+- Пагінація + кнопка «Показати ще»
+- Фільтри та пагінація зберігаються в URL
+- Loading / Empty / Error стани
+- Адаптивна верстка: mobile / tablet / desktop
+
+## Запуск
 
 **1. Встановити залежності**
 
@@ -31,32 +54,32 @@ npm run lint    # перевірка ESLint
 
 ## Архітектура (FSD)
 
+Проєкт побудовано за методологією [Feature-Sliced Design](https://feature-sliced.design/).
+
 ```
 src/
 ├── app/                        # ініціалізація: layout, store, providers, routing
-├── views/
-│   └── catalog/                # сторінка каталогу (композиція widgets)
+├── views/                      # сторінки 
+│   └── catalog/                # сторінка каталогу — композиція widgets
 ├── widgets/
 │   ├── header/                 # шапка з лічильником обраного
 │   ├── footer/                 # підвал
 │   ├── product-catalog/        # каталог: сітка, фільтри, сортування, пагінація
 │   └── recommended-products/   # блок рекомендованих товарів
 ├── features/
-│   ├── product-filters/        # фільтри, URL-стейт (useCatalogFilters), хлібні крихти
-│   ├── product-sort/           # сортування (desktop dropdown, mobile sheet)
+│   ├── product-filters/        # фільтри, URL-стейт, useCatalogFilters, хлібні крихти
+│   ├── product-sort/           # сортування (dropdown / mobile sheet)
 │   └── pagination/             # Load More + пагінація
 ├── entities/
 │   └── product/
-│       ├── api/                # RTK Query API, типи домену
-│       ├── config/             # опції фільтрів (категорії, кольори, розміри…)
+│       ├── api/                # RTK Query API, типи домену (CatalogCard, SortOption…)
+│       ├── config/             # опції фільтрів (категорії, кольори, розміри, матеріали)
 │       └── ui/                 # ProductCard, ProductCardSkeleton, SliderProductCard
 └── shared/
-    ├── ui/                     # generic UI: Button, Checkbox, Chip, RangeSlider…
+    ├── ui/                     # generic UI-компоненти: Button, Checkbox, Chip, RangeSlider…
     └── lib/                    # generic утиліти: cn, formatPrice, useSkeletonCount
 ```
 
 ## API
 
-Базовий URL: `http://test-woh.keykey.com.ua/v1`
-
-Swagger: [http://test-woh.keykey.com.ua/v1/docs/](http://test-woh.keykey.com.ua/v1/docs/)
+Swagger-документація доступна за адресою, вказаною в `.env.local`.
