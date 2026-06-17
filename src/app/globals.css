@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+:root {
+  --color-bg: rgba(250, 250, 250, 0.5);
+  --color-bg-muted: #faf7f8;
+  --color-text: #111111;
+  --color-text-muted: #8c8c8c;
+  --color-border: #e7e2e4;
+  --color-pink-main: rgba(255, 153, 214, 1);
+  --color-accent-soft: #fbe4ec;
+  --color-grey-text: rgba(156, 163, 175, 1);
+  --color-dark-main: rgba(13, 13, 13, 1);
+  --color-white-main: rgba(254, 254, 254, 1);
+  --color-grey-second: rgba(61, 63, 60, 1);
+}
+
+@theme {
+  --breakpoint-3xl: 108rem;
+}
+
+@theme inline {
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-text);
+  --color-bg-muted: var(--color-bg-muted);
+  --color-text-muted: var(--color-text-muted);
+  --color-border: var(--color-border);
+  --color-pink-main: var(--color-pink-main);
+  --color-accent-soft: var(--color-accent-soft);
+  --color-grey-text: var(--color-grey-text);
+  --color-dark-main: var(--color-dark-main);
+  --color-white-main: var(--color-white-main);
+  --color-grey-second: var(--color-grey-second);
+  --font-sans: var(--font-geist-sans);
+  --font-golos: var(--font-geist-sans);
+  --font-montserrat: var(--font-montserrat);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+.range-slider-thumb::-webkit-slider-thumb {
+  pointer-events: auto;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 2px solid var(--color-pink-main);
+  cursor: pointer;
+}
+
+.range-slider-thumb::-moz-range-thumb {
+  pointer-events: auto;
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 2px solid var(--color-pink-main);
+  cursor: pointer;
+}
