@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import { cn, useCatalogFilters } from "@/shared/lib";
 import type { CatalogFilters } from "@/shared/lib";
 import { Button, IconButton, CloseIcon, FilterIcon } from "@/shared/ui";
@@ -12,8 +12,13 @@ export function MobileFilterDrawer() {
   const sidebarRef = useRef<FilterSidebarHandle>(null);
   const [pendingFilters, setPendingFilters] = useState<CatalogFilters>(filters);
 
-  const chips = getFilterChips(pendingFilters);
+  const chips = useMemo(() => getFilterChips(pendingFilters), [pendingFilters]);
   const previewCount = usePreviewCount(pendingFilters);
+
+  const handleOpen = () => {
+    setPendingFilters(filters);
+    setIsOpen(true);
+  };
 
   const handleApply = () => {
     sidebarRef.current?.apply();
@@ -28,7 +33,7 @@ export function MobileFilterDrawer() {
   return (
     <>
       <Button
-        onClick={() => setIsOpen(true)}
+        onClick={handleOpen}
         className="h-7.5 gap-2 bg-pink-main px-8 py-2 font-golos text-xs font-semibold text-white-main md:w-34.5 md:rounded-none md:px-4 3xl:hidden"
       >
         <FilterIcon />

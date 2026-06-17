@@ -2,8 +2,10 @@
 
 import {
   forwardRef,
+  useCallback,
   useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -15,6 +17,18 @@ import type { CatalogFilters } from "@/shared/lib";
 import { FilterSection } from "@/features/product-filters/ui/FilterSection";
 import type { CategorySlug, HeelHeight, ProductColor, ProductMaterial } from "@/shared/api";
 import type { ChipKey } from "@/features/product-filters/model/getFilterChips";
+
+type MultiFilterKey = "insoleSizes" | "heelHeights" | "materials" | "colors";
+
+const DEFAULT_FILTERS: CatalogFilters = {
+  categories: [],
+  insoleSizes: [],
+  heelHeights: [],
+  materials: [],
+  colors: [],
+  sort: "updated_desc",
+  page: 1,
+};
 
 export interface FilterSidebarHandle {
   apply: () => void;
@@ -33,44 +47,35 @@ export const FilterSidebar = forwardRef<FilterSidebarHandle, FilterSidebarProps>
     const searchParams = useSearchParams();
     const { clearAll, applyFilters } = useCatalogFilters();
 
-    const [pending, setPending] = useState<CatalogFilters>(
-      parseCatalogFilters(searchParams),
-    );
+    const parsedFilters = useMemo(() => parseCatalogFilters(searchParams), [searchParams]);
 
-    const userChangedRef = useRef(false);
-    const isApplyingRef = useRef(false);
+    const [pending, setPending] = useState<CatalogFilters>(parsedFilters);
+    const pendingSourceRef = useRef<"user" | "url">("url");
 
     useEffect(() => {
       onPendingChange?.(pending);
     }, [pending, onPendingChange]);
 
     useEffect(() => {
-      if (isApplyingRef.current) {
-        isApplyingRef.current = false;
+      if (pendingSourceRef.current === "user") {
+        pendingSourceRef.current = "url";
         return;
       }
-      setPending(parseCatalogFilters(searchParams));
-    }, [
-      searchParams.get("sort"),
-      searchParams.get("page"),
-      searchParams.get("category"),
-      searchParams.get("size"),
-      searchParams.get("heel"),
-      searchParams.get("material"),
-      searchParams.get("color"),
-      searchParams.get("minPrice"),
-      searchParams.get("maxPrice"),
-    ]);
+      setPending(parsedFilters);
+    }, [parsedFilters]);
 
     useEffect(() => {
-      if (!autoApply || !userChangedRef.current) return;
-      userChangedRef.current = false;
-      isApplyingRef.current = true;
+      if (!autoApply || pendingSourceRef.current !== "user") return;
+      pendingSourceRef.current = "url";
       applyFilters(pending);
-    }, [pending]);
+    }, [pending, autoApply, applyFilters]);
+
+    const markUserChanged = useCallback(() => {
+      pendingSourceRef.current = "user";
+    }, []);
 
     const toggleCategory = (cat: CategorySlug) => {
-      userChangedRef.current = true;
+      markUserChanged();
       setPending((p) => ({
         ...p,
         categories: p.categories.includes(cat)
@@ -79,11 +84,8 @@ export const FilterSidebar = forwardRef<FilterSidebarHandle, FilterSidebarProps>
       }));
     };
 
-    const toggleMulti = <T extends string | number>(
-      key: keyof Pick<CatalogFilters, "insoleSizes" | "heelHeights" | "materials" | "colors">,
-      value: T,
-    ) => {
-      userChangedRef.current = true;
+    const toggleMulti = <T extends string | number>(key: MultiFilterKey, value: T) => {
+      markUserChanged();
       setPending((p) => {
         const arr = p[key] as T[];
         return {
@@ -93,7 +95,8 @@ export const FilterSidebar = forwardRef<FilterSidebarHandle, FilterSidebarProps>
       });
     };
 
-    const removePending = (key: ChipKey) => {
+    const removePending = useCallback((key: ChipKey) => {
+      markUserChanged();
       setPending((p) => {
         if (key === "category") return { ...p, categories: [] };
         if (key === "price") return { ...p, minPrice: undefined, maxPrice: undefined };
@@ -103,15 +106,22 @@ export const FilterSidebar = forwardRef<FilterSidebarHandle, FilterSidebarProps>
         if (key === "color") return { ...p, colors: [] };
         return p;
       });
-    };
+    }, [markUserChanged]);
 
-    const reset = () => setPending({ categories: [], insoleSizes: [], heelHeights: [], materials: [], colors: [], sort: "updated_desc", page: 1 });
+    const reset = useCallback(() => {
+      markUserChanged();
+      setPending({ ...DEFAULT_FILTERS });
+    }, [markUserChanged]);
 
-    useImperativeHandle(ref, () => ({
-      apply: () => applyFilters(pending),
-      removePending,
-      reset,
-    }));
+    useImperativeHandle(
+      ref,
+      () => ({
+        apply: () => applyFilters(pending),
+        removePending,
+        reset,
+      }),
+      [pending, applyFilters, removePending, reset],
+    );
 
     const priceValue: [number, number] = [
       pending.minPrice ?? PRICE_RANGE.min,
@@ -190,9 +200,10 @@ export const FilterSidebar = forwardRef<FilterSidebarHandle, FilterSidebarProps>
               max={PRICE_RANGE.max}
               step={100}
               value={priceValue}
-              onChange={([min, max]) =>
-                setPending((p) => ({ ...p, minPrice: min, maxPrice: max }))
-              }
+              onChange={([min, max]) => {
+                markUserChanged();
+                setPending((p) => ({ ...p, minPrice: min, maxPrice: max }));
+              }}
             />
             <div className="flex items-center justify-between text-sm leading-none font-medium text-dark-main 3xl:text-base">
               <span>{formatPrice(priceValue[0])}</span>

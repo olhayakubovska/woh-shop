@@ -1,8 +1,9 @@
 "use client";
 
 import { useGetCatalogCardsQuery } from "@/shared/api";
-import { ProductCard, ProductCardSkeleton, SliderProductCard } from "@/entities/product";
 import { ErrorState } from "@/shared/ui";
+import { RecommendedSkeletons } from "./RecommendedSkeletons";
+import { RecommendedItems } from "./RecommendedItems";
 
 export function RecommendedProducts() {
   const { data, isFetching, isError, refetch } = useGetCatalogCardsQuery({
@@ -10,80 +11,21 @@ export function RecommendedProducts() {
     sort: "updated_desc",
   });
 
-  const items = data?.items ?? [];
-  const mobileItems = items.slice(0, 2);
-  const sliderItems = items.slice(0, 8);
-  const desktopItems = items.slice(0, 6);
-
   return (
     <section className="pt-12 md:pt-14 3xl:pt-20">
       <p className="font-golos text-xs leading-3.5 font-bold tracking-[1px] text-pink-main uppercase 3xl:text-sm">
         Our selection
       </p>
-
       <h2 className="mb-4 text-xl font-extrabold tracking-[1px] uppercase sm:text-4xl md:text-2xl md:leading-9 3xl:mt-1 3xl:mb-7 3xl:text-4xl">
         Рекомендовані товари
       </h2>
 
-      {isError && <ErrorState onRetry={refetch} />}
-
-      {isFetching ? (
-        <>
-          <div className="grid grid-cols-2 gap-4 md:hidden">
-            {Array.from({ length: 2 }).map((_, i) => (
-              <ProductCardSkeleton key={i} />
-            ))}
-          </div>
-
-          <div className="-mr-6 hidden gap-4 overflow-x-auto pb-2 md:flex md:pb-0 3xl:hidden">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="w-40.5 shrink-0">
-                <ProductCardSkeleton />
-              </div>
-            ))}
-          </div>
-
-          <div className="hidden 3xl:grid 3xl:grid-cols-6 3xl:gap-6">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <ProductCardSkeleton key={i} />
-            ))}
-          </div>
-        </>
+      {isError ? (
+        <ErrorState onRetry={refetch} />
+      ) : isFetching ? (
+        <RecommendedSkeletons />
       ) : (
-        <>
-          <div className="grid grid-cols-2 gap-4 md:hidden">
-            {mobileItems.map((product) => (
-              <ProductCard key={product.groupId} product={product} />
-            ))}
-          </div>
-
-          <div className="-mx-4 hidden snap-x snap-mandatory gap-4 overflow-x-auto pb-2 md:-mx-6 md:flex md:pb-0 3xl:hidden [&::-webkit-scrollbar]:hidden">
-            {sliderItems.map((product, i) => (
-              <div
-                key={product.groupId}
-                className={`w-40.5 shrink-0 snap-start ${i === 0 ? "pl-4 md:pl-6" : ""}`}
-              >
-                <SliderProductCard product={product} />
-              </div>
-            ))}
-            <div className="w-4 shrink-0 md:w-6" />
-          </div>
-
-          <div className="hidden 3xl:grid 3xl:grid-cols-6 3xl:gap-6">
-            {desktopItems.map((product) => (
-              <ProductCard
-                key={product.groupId}
-                product={product}
-                imageClassName="3xl:w-[230px] 3xl:h-[289px]"
-                infoClassName="3xl:p-3"
-                titleClassName="3xl:text-[10px] 3xl:font-medium 3xl:leading-4 3xl:tracking-[0.5px]"
-                descriptionClassName="3xl:text-[8px] 3xl:font-normal 3xl:leading-2 3xl:tracking-normal 3xl:whitespace-nowrap "
-                priceClassName="3xl:text-xs 3xl:font-medium 3xl:font-golos 3xl:tracking-normal"
-                favoriteClassName="3xl:h-8 3xl:w-8 3xl:top-2 3xl:right-2"
-              />
-            ))}
-          </div>
-        </>
+        <RecommendedItems items={data?.items ?? []} />
       )}
     </section>
   );

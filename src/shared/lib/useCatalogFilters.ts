@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { CATEGORY_OPTIONS, COLOR_OPTIONS, HEEL_HEIGHT_OPTIONS, INSOLE_SIZES, MATERIAL_OPTIONS, PRICE_RANGE, SORT_OPTIONS } from "@/shared/config/filters";
 import type { CategorySlug, HeelHeight, ProductColor, ProductMaterial, SortOption } from "@/shared/api/types";
@@ -121,10 +122,12 @@ export function useCatalogFilters() {
     });
   };
 
-  const setPage = (page: number) => {
+  const setPage = (pageOrUpdater: number | ((prev: number) => number)) => {
     apply((params) => {
-      if (page <= 1) params.delete("page");
-      else params.set("page", String(page));
+      const current = Number(params.get("page") ?? 1);
+      const next = typeof pageOrUpdater === "function" ? pageOrUpdater(current) : pageOrUpdater;
+      if (next <= 1) params.delete("page");
+      else params.set("page", String(next));
     });
   };
 
@@ -144,10 +147,10 @@ export function useCatalogFilters() {
     router.replace(pathname, { scroll: false });
   };
 
-  const applyFilters = (pending: CatalogFilters) => {
+  const applyFilters = useCallback((pending: CatalogFilters) => {
     const params = serializeFilters(pending, searchParams.get("sort"));
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-  };
+  }, [searchParams, pathname, router]);
 
   return {
     filters,

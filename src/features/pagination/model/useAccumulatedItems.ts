@@ -1,19 +1,22 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { CatalogCard } from "@/shared/api";
+import { PAGE_SIZE } from "@/shared/config";
+import type { CatalogCard, CatalogCardsResponse } from "@/shared/api";
 
 interface UseAccumulatedItemsResult {
   items: CatalogCard[];
   isAppendPending: boolean;
   isLoadingMore: boolean;
+  remaining: number;
   handleLoadMore: () => void;
   handlePageChange: () => void;
 }
 
 export function useAccumulatedItems(
-  data: { items: CatalogCard[] } | undefined,
-  isLoading: boolean,
+  data: CatalogCardsResponse | undefined,
+  currentPage: number,
+  isFetching: boolean,
   onLoadMore: () => void,
 ): UseAccumulatedItemsResult {
   const [items, setItems] = useState<CatalogCard[]>([]);
@@ -42,10 +45,18 @@ export function useAccumulatedItems(
     setIsAppendPending(false);
   };
 
+  const totalPages = data?.meta.pages ?? 1;
+  const total = data?.meta.total ?? 0;
+  const remaining =
+    currentPage < totalPages
+      ? Math.min(PAGE_SIZE, total - currentPage * PAGE_SIZE)
+      : 0;
+
   return {
     items,
     isAppendPending,
-    isLoadingMore: isLoading && isAppendPending,
+    isLoadingMore: isFetching && isAppendPending,
+    remaining,
     handleLoadMore,
     handlePageChange,
   };

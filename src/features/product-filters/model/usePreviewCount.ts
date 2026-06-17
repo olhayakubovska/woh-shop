@@ -6,41 +6,54 @@ import type { CatalogCardsArgs } from "@/shared/api";
 import { PRICE_RANGE } from "@/shared/config";
 import type { CatalogFilters } from "@/shared/lib";
 
+interface FiltersSnapshot {
+  categories: string[];
+  insoleSizes: number[];
+  heelHeights: string[];
+  materials: string[];
+  colors: string[];
+  minPrice?: number;
+  maxPrice?: number;
+}
+
 export function usePreviewCount(pending: CatalogFilters): number | null {
   const [debouncedArgs, setDebouncedArgs] = useState<CatalogCardsArgs | null>(null);
 
-  const categoriesKey = pending.categories.join(",");
-
-  const insoleSizesKey = pending.insoleSizes.join(",");
-  const heelHeightsKey = pending.heelHeights.join(",");
-  const materialsKey = pending.materials.join(",");
-  const colorsKey = pending.colors.join(",");
+  const filtersKey = JSON.stringify({
+    categories: [...pending.categories].sort(),
+    insoleSizes: [...pending.insoleSizes].sort(),
+    heelHeights: [...pending.heelHeights].sort(),
+    materials: [...pending.materials].sort(),
+    colors: [...pending.colors].sort(),
+    minPrice: pending.minPrice,
+    maxPrice: pending.maxPrice,
+  });
 
   useEffect(() => {
+    const snapshot = JSON.parse(filtersKey) as FiltersSnapshot;
+
     const timer = setTimeout(() => {
       setDebouncedArgs({
-        categories: pending.categories,
-        insoleSizes: pending.insoleSizes,
-        heelHeights: pending.heelHeights,
-        materials: pending.materials,
-        colors: pending.colors,
-        minPrice: pending.minPrice && pending.minPrice > PRICE_RANGE.min ? pending.minPrice : undefined,
-        maxPrice: pending.maxPrice && pending.maxPrice < PRICE_RANGE.max ? pending.maxPrice : undefined,
+        categories: snapshot.categories,
+        insoleSizes: snapshot.insoleSizes,
+        heelHeights: snapshot.heelHeights,
+        materials: snapshot.materials,
+        colors: snapshot.colors,
+        minPrice:
+          snapshot.minPrice !== undefined && snapshot.minPrice > PRICE_RANGE.min
+            ? snapshot.minPrice
+            : undefined,
+        maxPrice:
+          snapshot.maxPrice !== undefined && snapshot.maxPrice < PRICE_RANGE.max
+            ? snapshot.maxPrice
+            : undefined,
       });
     }, 400);
 
     return () => clearTimeout(timer);
-  }, [
-    categoriesKey,
-    insoleSizesKey,
-    heelHeightsKey,
-    materialsKey,
-    colorsKey,
-    pending.minPrice,
-    pending.maxPrice,
-  ]);
+  }, [filtersKey]);
 
-  const { data } = useGetProductCountQuery(debouncedArgs!, {
+  const { data } = useGetProductCountQuery(debouncedArgs ?? {}, {
     skip: debouncedArgs === null,
   });
 
