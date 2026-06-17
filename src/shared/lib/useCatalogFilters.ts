@@ -1,21 +1,8 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import {
-  CATEGORY_OPTIONS,
-  COLOR_OPTIONS,
-  HEEL_HEIGHT_OPTIONS,
-  MATERIAL_OPTIONS,
-  PRICE_RANGE,
-  SORT_OPTIONS,
-} from "@/shared/config/filters";
-import type {
-  CategorySlug,
-  HeelHeight,
-  ProductColor,
-  ProductMaterial,
-  SortOption,
-} from "@/shared/api/types";
+import { CATEGORY_OPTIONS, COLOR_OPTIONS, HEEL_HEIGHT_OPTIONS, MATERIAL_OPTIONS, PRICE_RANGE, SORT_OPTIONS } from "@/shared/config/filters";
+import type { CategorySlug, HeelHeight, ProductColor, ProductMaterial, SortOption } from "@/shared/api/types";
 
 export interface CatalogFilters {
   categories: CategorySlug[];
@@ -178,6 +165,20 @@ export function useCatalogFilters() {
     router.replace(pathname, { scroll: false });
   };
 
+  const applyFilters = (pending: CatalogFilters) => {
+    const params = new URLSearchParams();
+    const sort = searchParams.get("sort");
+    if (sort) params.set("sort", sort);
+    if (pending.categories.length > 0) params.set("category", pending.categories.join(","));
+    if (pending.insoleSize) params.set("size", String(pending.insoleSize));
+    if (pending.heelHeight) params.set("heel", pending.heelHeight);
+    if (pending.material) params.set("material", pending.material);
+    if (pending.color) params.set("color", pending.color);
+    if (pending.minPrice != null && pending.minPrice > PRICE_RANGE.min) params.set("minPrice", String(pending.minPrice));
+    if (pending.maxPrice != null && pending.maxPrice < PRICE_RANGE.max) params.set("maxPrice", String(pending.maxPrice));
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
   return {
     filters,
     setCategories,
@@ -190,5 +191,6 @@ export function useCatalogFilters() {
     setPage,
     removeFilter,
     clearAll,
+    applyFilters,
   };
 }

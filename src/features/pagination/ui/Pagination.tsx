@@ -1,7 +1,6 @@
 "use client";
 
-import { useCatalogFilters } from "@/shared/lib/useCatalogFilters";
-import { cn } from "@/shared/lib/cn";
+import { useCatalogFilters, cn } from "@/shared/lib";
 
 interface PaginationProps {
   totalPages: number;
@@ -50,7 +49,7 @@ export function Pagination({ totalPages, onPageChange }: PaginationProps) {
 
   return (
     <nav
-      className="mx-auto mt-4 flex max-w-76.25 flex-wrap items-center justify-center gap-6 text-sm whitespace-nowrap md:mt-6 md:h-[18px]"
+      className="mx-auto mt-4 flex max-w-76.25 flex-wrap items-center justify-center gap-6 text-sm whitespace-nowrap md:mt-6 md:h-4.5"
       aria-label="Пагінація"
     >
       <button

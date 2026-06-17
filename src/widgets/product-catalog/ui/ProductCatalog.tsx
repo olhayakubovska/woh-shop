@@ -2,23 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useGetCatalogCardsQuery } from "@/shared/api/catalogApi";
-import { ProductCard } from "@/entities/product/ui/ProductCard";
-import { ProductCardSkeleton } from "@/entities/product/ui/ProductCardSkeleton";
-import { ActiveFiltersBar } from "@/features/product-filters/ui/ActiveFiltersBar";
-import { FilterSidebar } from "@/features/product-filters/ui/FilterSidebar";
-import { MobileFilterDrawer } from "@/features/product-filters/ui/MobileFilterDrawer";
-import { LoadMoreButton } from "@/features/pagination/ui/LoadMoreButton";
-import { Pagination } from "@/features/pagination/ui/Pagination";
-import { SortDropdown } from "@/features/product-sort/ui/SortDropdown";
-import { MobileSortSheet } from "@/features/product-sort/ui/MobileSortSheet";
-import { PAGE_SIZE } from "@/shared/config/filters";
-import { EmptyState } from "@/shared/ui/EmptyState";
-import { ErrorState } from "@/shared/ui/ErrorState";
-import { Button } from "@/shared/ui/Button";
-import { useCatalogFilters } from "@/shared/lib/useCatalogFilters";
-import { useBreadcrumbs } from "@/shared/lib/useBreadcrumbs";
-import type { CatalogCard } from "@/shared/api/types";
+import { useGetCatalogCardsQuery } from "@/shared/api";
+import { ProductCard, ProductCardSkeleton } from "@/entities/product";
+import { ActiveFiltersBar, FilterSidebar, MobileFilterDrawer } from "@/features/product-filters";
+import { LoadMoreButton, Pagination } from "@/features/pagination";
+import { SortDropdown, MobileSortSheet } from "@/features/product-sort";
+import { PAGE_SIZE } from "@/shared/config";
+import { EmptyState, ErrorState, Button } from "@/shared/ui";
+import { useCatalogFilters, useBreadcrumbs } from "@/shared/lib";
+import type { CatalogCard } from "@/shared/api";
 
 export function ProductCatalog() {
   const { filters, clearAll, setPage } = useCatalogFilters();

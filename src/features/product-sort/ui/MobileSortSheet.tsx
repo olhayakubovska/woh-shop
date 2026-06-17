@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { SORT_OPTIONS } from "@/shared/config/filters";
-import { useCatalogFilters } from "@/shared/lib/useCatalogFilters";
-import { cn } from "@/shared/lib/cn";
-import { Button } from "@/shared/ui/Button";
+import { SORT_OPTIONS } from "@/shared/config";
+import { useCatalogFilters, cn } from "@/shared/lib";
+import { Button } from "@/shared/ui";
 
 export function MobileSortSheet() {
   const { filters, setSort } = useCatalogFilters();

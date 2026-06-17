@@ -1,12 +1,6 @@
-import {
-  CATEGORY_OPTIONS,
-  COLOR_OPTIONS,
-  HEEL_HEIGHT_OPTIONS,
-  MATERIAL_OPTIONS,
-  PRICE_RANGE,
-} from "@/shared/config/filters";
-import { formatPrice } from "@/shared/lib/format";
-import type { CatalogFilters } from "@/shared/lib/useCatalogFilters";
+import { CATEGORY_OPTIONS, COLOR_OPTIONS, HEEL_HEIGHT_OPTIONS, MATERIAL_OPTIONS, PRICE_RANGE } from "@/shared/config";
+import { formatPrice } from "@/shared/lib";
+import type { CatalogFilters } from "@/shared/lib";
 
 export type ChipKey =
   | "category"

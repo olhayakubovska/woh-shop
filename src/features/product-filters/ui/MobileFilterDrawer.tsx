@@ -1,19 +1,10 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { cn } from "@/shared/lib/cn";
-import { Button } from "@/shared/ui/Button";
-import { CloseIcon, FilterIcon } from "@/shared/ui/icons";
-import {
-  FilterSidebar,
-  type FilterSidebarHandle,
-} from "@/features/product-filters/ui/FilterSidebar";
-import { getFilterChips } from "@/features/product-filters/model/getFilterChips";
-import { usePreviewCount } from "@/features/product-filters/model/usePreviewCount";
-import {
-  useCatalogFilters,
-  type CatalogFilters,
-} from "@/shared/lib/useCatalogFilters";
+import { cn, useCatalogFilters } from "@/shared/lib";
+import type { CatalogFilters } from "@/shared/lib";
+import { Button, CloseIcon, FilterIcon } from "@/shared/ui";
+import { FilterSidebar, type FilterSidebarHandle, getFilterChips, usePreviewCount } from "@/features/product-filters";
 
 export function MobileFilterDrawer() {
   const [isOpen, setIsOpen] = useState(false);

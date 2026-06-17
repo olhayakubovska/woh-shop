@@ -1,8 +1,8 @@
 "use client";
 
 import { useActiveFilterChips } from "@/features/product-filters/model/useActiveFilterChips";
-import { useCatalogFilters } from "@/shared/lib/useCatalogFilters";
-import { CloseIcon } from "@/shared/ui/icons";
+import { useCatalogFilters } from "@/shared/lib";
+import { CloseIcon } from "@/shared/ui";
 
 export function ActiveFiltersBar() {
   const { clearAll } = useCatalogFilters();

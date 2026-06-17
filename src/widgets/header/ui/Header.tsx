@@ -1,13 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import {
-  CartIcon,
-  HeartIcon,
-  SearchIcon,
-  UserIcon,
-} from "@/shared/ui/icons";
-import { IconButton } from "@/shared/ui/IconButton";
-import { BurgerMenu } from "@/widgets/header/ui/BurgerMenu";
+import { CartIcon, HeartIcon, SearchIcon, UserIcon, IconButton } from "@/shared/ui";
+import { BurgerMenu } from "@/widgets/header";
 
 const NAV_LINKS = [
   { href: "/catalog", label: "Каталог" },

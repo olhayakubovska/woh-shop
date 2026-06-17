@@ -1,9 +1,8 @@
 "use client";
 
-import { useGetCatalogCardsQuery } from "@/shared/api/catalogApi";
-import { ProductCard } from "@/entities/product/ui/ProductCard";
-import { SliderProductCard } from "@/entities/product/ui/SliderProductCard";
-import { ErrorState } from "@/shared/ui/ErrorState";
+import { useGetCatalogCardsQuery } from "@/shared/api";
+import { ProductCard, SliderProductCard } from "@/entities/product";
+import { ErrorState } from "@/shared/ui";
 
 export function RecommendedProducts() {
   const { data, isError, refetch } = useGetCatalogCardsQuery({

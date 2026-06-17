@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { SORT_OPTIONS } from "@/shared/config/filters";
-import { useCatalogFilters } from "@/shared/lib/useCatalogFilters";
-import { cn } from "@/shared/lib/cn";
+import { SORT_OPTIONS } from "@/shared/config";
+import { useCatalogFilters, cn } from "@/shared/lib";
 
 export function SortDropdown() {
   const { filters, setSort } = useCatalogFilters();

@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { CloseIcon, MenuIcon } from "@/shared/ui/icons";
-import { IconButton } from "@/shared/ui/IconButton";
+import { CloseIcon, MenuIcon, IconButton } from "@/shared/ui";
 
 const NAV_LINKS = [
   { href: "/catalog", label: "Каталог" },
