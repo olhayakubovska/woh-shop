@@ -13,7 +13,8 @@ import { Checkbox, Chip, ColorSwatch, RangeSlider, Button } from "@/shared/ui";
 import { formatPrice, parseCatalogFilters, useCatalogFilters } from "@/shared/lib";
 import type { CatalogFilters } from "@/shared/lib";
 import { FilterSection } from "@/features/product-filters/ui/FilterSection";
-import type { CategorySlug, HeelHeight, ProductColor, ProductMaterial } from "@/shared/api";
+import type { CategorySlug } from "@/shared/api";
+import type { HeelHeight, ProductColor, ProductMaterial } from "@/shared/api";
 import type { ChipKey } from "@/features/product-filters/model/getFilterChips";
 
 export interface FilterSidebarHandle {
@@ -38,12 +39,17 @@ export const FilterSidebar = forwardRef<FilterSidebarHandle, FilterSidebarProps>
     );
 
     const userChangedRef = useRef(false);
+    const isApplyingRef = useRef(false);
 
     useEffect(() => {
       onPendingChange?.(pending);
     }, [pending, onPendingChange]);
 
     useEffect(() => {
+      if (isApplyingRef.current) {
+        isApplyingRef.current = false;
+        return;
+      }
       setPending(parseCatalogFilters(searchParams));
     }, [
       searchParams.get("sort"),
@@ -60,6 +66,7 @@ export const FilterSidebar = forwardRef<FilterSidebarHandle, FilterSidebarProps>
     useEffect(() => {
       if (!autoApply || !userChangedRef.current) return;
       userChangedRef.current = false;
+      isApplyingRef.current = true;
       applyFilters(pending);
     }, [pending]);
 
@@ -73,27 +80,33 @@ export const FilterSidebar = forwardRef<FilterSidebarHandle, FilterSidebarProps>
       }));
     };
 
-    const toggleSimple = <T extends string | number>(
-      key: keyof Omit<CatalogFilters, "categories" | "sort" | "page">,
+    const toggleMulti = <T extends string | number>(
+      key: keyof Pick<CatalogFilters, "insoleSizes" | "heelHeights" | "materials" | "colors">,
       value: T,
     ) => {
       userChangedRef.current = true;
-      setPending((p) => ({ ...p, [key]: p[key] === value ? undefined : value }));
+      setPending((p) => {
+        const arr = p[key] as T[];
+        return {
+          ...p,
+          [key]: arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value],
+        };
+      });
     };
 
     const removePending = (key: ChipKey) => {
       setPending((p) => {
         if (key === "category") return { ...p, categories: [] };
         if (key === "price") return { ...p, minPrice: undefined, maxPrice: undefined };
-        if (key === "size") return { ...p, insoleSize: undefined };
-        if (key === "heel") return { ...p, heelHeight: undefined };
-        if (key === "material") return { ...p, material: undefined };
-        if (key === "color") return { ...p, color: undefined };
+        if (key === "size") return { ...p, insoleSizes: [] };
+        if (key === "heel") return { ...p, heelHeights: [] };
+        if (key === "material") return { ...p, materials: [] };
+        if (key === "color") return { ...p, colors: [] };
         return p;
       });
     };
 
-    const reset = () => setPending({ categories: [], sort: "updated_desc", page: 1 });
+    const reset = () => setPending({ categories: [], insoleSizes: [], heelHeights: [], materials: [], colors: [], sort: "updated_desc", page: 1 });
 
     useImperativeHandle(ref, () => ({
       apply: () => applyFilters(pending),
@@ -127,8 +140,8 @@ export const FilterSidebar = forwardRef<FilterSidebarHandle, FilterSidebarProps>
               {INSOLE_SIZES.map((size) => (
                 <Chip
                   key={size}
-                  active={pending.insoleSize === size}
-                  onClick={() => toggleSimple("insoleSize", size)}
+                  active={pending.insoleSizes.includes(size)}
+                  onClick={() => toggleMulti("insoleSizes", size)}
                 >
                   {size.toFixed(1)}
                 </Chip>
@@ -141,8 +154,8 @@ export const FilterSidebar = forwardRef<FilterSidebarHandle, FilterSidebarProps>
               <Checkbox
                 key={option.value}
                 label={option.label}
-                checked={pending.heelHeight === option.value}
-                onChange={() => toggleSimple<HeelHeight>("heelHeight", option.value)}
+                checked={pending.heelHeights.includes(option.value)}
+                onChange={() => toggleMulti<HeelHeight>("heelHeights", option.value)}
               />
             ))}
           </FilterSection>
@@ -152,8 +165,8 @@ export const FilterSidebar = forwardRef<FilterSidebarHandle, FilterSidebarProps>
               <Checkbox
                 key={option.value}
                 label={option.label}
-                checked={pending.material === option.value}
-                onChange={() => toggleSimple<ProductMaterial>("material", option.value)}
+                checked={pending.materials.includes(option.value)}
+                onChange={() => toggleMulti<ProductMaterial>("materials", option.value)}
               />
             ))}
           </FilterSection>
@@ -165,8 +178,8 @@ export const FilterSidebar = forwardRef<FilterSidebarHandle, FilterSidebarProps>
                   key={option.value}
                   hex={option.hex}
                   label={option.label}
-                  active={pending.color === option.value}
-                  onClick={() => toggleSimple<ProductColor>("color", option.value)}
+                  active={pending.colors.includes(option.value)}
+                  onClick={() => toggleMulti<ProductColor>("colors", option.value)}
                 />
               ))}
             </div>

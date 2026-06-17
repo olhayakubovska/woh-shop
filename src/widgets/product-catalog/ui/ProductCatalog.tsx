@@ -14,14 +14,14 @@ import type { CatalogCard } from "@/shared/api";
 
 export function ProductCatalog() {
   const { filters, clearAll, setPage } = useCatalogFilters();
-  const breadcrumbs = useBreadcrumbs(filters.categories[0]);
+  const breadcrumbs = useBreadcrumbs(filters.categories);
 
   const queryArgs = {
-    category: filters.categories[0],
-    insoleSize: filters.insoleSize,
-    heelHeight: filters.heelHeight,
-    material: filters.material,
-    color: filters.color,
+    categories: filters.categories,
+    insoleSizes: filters.insoleSizes,
+    heelHeights: filters.heelHeights,
+    materials: filters.materials,
+    colors: filters.colors,
     minPrice: filters.minPrice,
     maxPrice: filters.maxPrice,
     sort: filters.sort,

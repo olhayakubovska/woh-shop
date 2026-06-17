@@ -14,13 +14,14 @@ const BASE_CRUMBS: BreadcrumbItem[] = [
   { label: "Каталог взуття", href: "/catalog" },
 ];
 
-export function useBreadcrumbs(categorySlug?: CategorySlug): BreadcrumbItem[] {
-  const categoryId = categorySlug ? CATEGORY_ID_MAP[categorySlug] : undefined;
+export function useBreadcrumbs(categories: CategorySlug[]): BreadcrumbItem[] {
+  const singleSlug = categories.length === 1 ? categories[0] : undefined;
+  const categoryId = singleSlug ? CATEGORY_ID_MAP[singleSlug] : undefined;
 
   const { data } = useGetBreadcrumbsQuery(categoryId!, { skip: !categoryId });
 
   const category = data?.[0];
-  if (categorySlug && category) {
+  if (singleSlug && category) {
     return [...BASE_CRUMBS, { label: category.title.ua || category.title.en }];
   }
   return BASE_CRUMBS;

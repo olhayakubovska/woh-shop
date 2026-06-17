@@ -1,15 +1,15 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { CATEGORY_OPTIONS, COLOR_OPTIONS, HEEL_HEIGHT_OPTIONS, MATERIAL_OPTIONS, PRICE_RANGE, SORT_OPTIONS } from "@/shared/config/filters";
+import { CATEGORY_OPTIONS, COLOR_OPTIONS, HEEL_HEIGHT_OPTIONS, INSOLE_SIZES, MATERIAL_OPTIONS, PRICE_RANGE, SORT_OPTIONS } from "@/shared/config/filters";
 import type { CategorySlug, HeelHeight, ProductColor, ProductMaterial, SortOption } from "@/shared/api/types";
 
 export interface CatalogFilters {
   categories: CategorySlug[];
-  insoleSize?: number;
-  heelHeight?: HeelHeight;
-  material?: ProductMaterial;
-  color?: ProductColor;
+  insoleSizes: number[];
+  heelHeights: HeelHeight[];
+  materials: ProductMaterial[];
+  colors: ProductColor[];
   minPrice?: number;
   maxPrice?: number;
   sort: SortOption;
@@ -21,49 +21,45 @@ const HEEL_VALUES = new Set(HEEL_HEIGHT_OPTIONS.map((o) => o.value));
 const MATERIAL_VALUES = new Set(MATERIAL_OPTIONS.map((o) => o.value));
 const COLOR_VALUES = new Set(COLOR_OPTIONS.map((o) => o.value));
 const SORT_VALUES = new Set(SORT_OPTIONS.map((o) => o.value));
+const INSOLE_VALUES = new Set(INSOLE_SIZES.map(String));
 
-export function parseCatalogFilters(
-  searchParams: URLSearchParams,
-): CatalogFilters {
-  const categoryRaw = searchParams.get("category") ?? "";
-  const categories = categoryRaw
-    .split(",")
-    .map((s) => s.trim())
-    .filter((s): s is CategorySlug => CATEGORY_VALUES.has(s as CategorySlug));
+function parseMulti(raw: string | null, validSet: Set<string>): string[] {
+  if (!raw) return [];
+  return raw.split(",").map((s) => s.trim()).filter((s) => validSet.has(s));
+}
 
-  const insoleSize = searchParams.get("size");
-  const heelHeight = searchParams.get("heel");
-  const material = searchParams.get("material");
-  const color = searchParams.get("color");
-  const minPrice = searchParams.get("minPrice");
-  const maxPrice = searchParams.get("maxPrice");
+export function parseCatalogFilters(searchParams: URLSearchParams): CatalogFilters {
+  const insoleSizesRaw = parseMulti(searchParams.get("size"), INSOLE_VALUES);
+
   const sort = searchParams.get("sort");
   const page = searchParams.get("page");
+  const minPrice = searchParams.get("minPrice");
+  const maxPrice = searchParams.get("maxPrice");
 
   return {
-    categories,
-    insoleSize:
-      insoleSize && !isNaN(Number(insoleSize)) ? Number(insoleSize) : undefined,
-    heelHeight:
-      heelHeight && HEEL_VALUES.has(heelHeight as HeelHeight)
-        ? (heelHeight as HeelHeight)
-        : undefined,
-    material:
-      material && MATERIAL_VALUES.has(material as ProductMaterial)
-        ? (material as ProductMaterial)
-        : undefined,
-    color:
-      color && COLOR_VALUES.has(color as ProductColor)
-        ? (color as ProductColor)
-        : undefined,
+    categories: parseMulti(searchParams.get("category"), CATEGORY_VALUES) as CategorySlug[],
+    insoleSizes: insoleSizesRaw.map(Number),
+    heelHeights: parseMulti(searchParams.get("heel"), HEEL_VALUES) as HeelHeight[],
+    materials: parseMulti(searchParams.get("material"), MATERIAL_VALUES) as ProductMaterial[],
+    colors: parseMulti(searchParams.get("color"), COLOR_VALUES) as ProductColor[],
     minPrice: minPrice ? Number(minPrice) : undefined,
     maxPrice: maxPrice ? Number(maxPrice) : undefined,
-    sort:
-      sort && SORT_VALUES.has(sort as SortOption)
-        ? (sort as SortOption)
-        : "updated_desc",
+    sort: sort && SORT_VALUES.has(sort as SortOption) ? (sort as SortOption) : "updated_desc",
     page: page && Number(page) > 0 ? Number(page) : 1,
   };
+}
+
+function serializeFilters(pending: CatalogFilters, sort?: string | null): URLSearchParams {
+  const params = new URLSearchParams();
+  if (sort) params.set("sort", sort);
+  if (pending.categories.length > 0) params.set("category", pending.categories.join(","));
+  if (pending.insoleSizes.length > 0) params.set("size", pending.insoleSizes.join(","));
+  if (pending.heelHeights.length > 0) params.set("heel", pending.heelHeights.join(","));
+  if (pending.materials.length > 0) params.set("material", pending.materials.join(","));
+  if (pending.colors.length > 0) params.set("color", pending.colors.join(","));
+  if (pending.minPrice != null && pending.minPrice > PRICE_RANGE.min) params.set("minPrice", String(pending.minPrice));
+  if (pending.maxPrice != null && pending.maxPrice < PRICE_RANGE.max) params.set("maxPrice", String(pending.maxPrice));
+  return params;
 }
 
 export function useCatalogFilters() {
@@ -81,6 +77,19 @@ export function useCatalogFilters() {
 
   const resetPage = (params: URLSearchParams) => params.delete("page");
 
+  const toggle = <T extends string | number>(paramKey: string, value: T) => {
+    apply((params) => {
+      const current = (params.get(paramKey) ?? "").split(",").filter(Boolean);
+      const strVal = String(value);
+      const next = current.includes(strVal)
+        ? current.filter((v) => v !== strVal)
+        : [...current, strVal];
+      if (next.length === 0) params.delete(paramKey);
+      else params.set(paramKey, next.join(","));
+      resetPage(params);
+    });
+  };
+
   const setCategories = (cats: CategorySlug[]) => {
     apply((params) => {
       if (cats.length === 0) params.delete("category");
@@ -89,38 +98,10 @@ export function useCatalogFilters() {
     });
   };
 
-  const toggleInsoleSize = (size: number) => {
-    apply((params) => {
-      const cur = params.get("size");
-      if (cur === String(size)) params.delete("size");
-      else params.set("size", String(size));
-      resetPage(params);
-    });
-  };
-
-  const toggleHeelHeight = (value: HeelHeight) => {
-    apply((params) => {
-      if (params.get("heel") === value) params.delete("heel");
-      else params.set("heel", value);
-      resetPage(params);
-    });
-  };
-
-  const toggleMaterial = (value: ProductMaterial) => {
-    apply((params) => {
-      if (params.get("material") === value) params.delete("material");
-      else params.set("material", value);
-      resetPage(params);
-    });
-  };
-
-  const toggleColor = (value: ProductColor) => {
-    apply((params) => {
-      if (params.get("color") === value) params.delete("color");
-      else params.set("color", value);
-      resetPage(params);
-    });
-  };
+  const toggleInsoleSize = (size: number) => toggle("size", size);
+  const toggleHeelHeight = (value: HeelHeight) => toggle("heel", value);
+  const toggleMaterial = (value: ProductMaterial) => toggle("material", value);
+  const toggleColor = (value: ProductColor) => toggle("color", value);
 
   const setPriceRange = ([min, max]: [number, number]) => {
     apply((params) => {
@@ -147,9 +128,7 @@ export function useCatalogFilters() {
     });
   };
 
-  const removeFilter = (
-    key: "category" | "size" | "heel" | "material" | "color" | "price",
-  ) => {
+  const removeFilter = (key: "category" | "size" | "heel" | "material" | "color" | "price") => {
     apply((params) => {
       if (key === "price") {
         params.delete("minPrice");
@@ -166,16 +145,7 @@ export function useCatalogFilters() {
   };
 
   const applyFilters = (pending: CatalogFilters) => {
-    const params = new URLSearchParams();
-    const sort = searchParams.get("sort");
-    if (sort) params.set("sort", sort);
-    if (pending.categories.length > 0) params.set("category", pending.categories.join(","));
-    if (pending.insoleSize) params.set("size", String(pending.insoleSize));
-    if (pending.heelHeight) params.set("heel", pending.heelHeight);
-    if (pending.material) params.set("material", pending.material);
-    if (pending.color) params.set("color", pending.color);
-    if (pending.minPrice != null && pending.minPrice > PRICE_RANGE.min) params.set("minPrice", String(pending.minPrice));
-    if (pending.maxPrice != null && pending.maxPrice < PRICE_RANGE.max) params.set("maxPrice", String(pending.maxPrice));
+    const params = serializeFilters(pending, searchParams.get("sort"));
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
