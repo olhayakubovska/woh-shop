@@ -80,6 +80,4 @@ src/
     └── lib/                    # generic утиліти: cn, formatPrice, useSkeletonCount
 ```
 
-## API
 
-Swagger-документація доступна за адресою, вказаною в `.env.local`.
